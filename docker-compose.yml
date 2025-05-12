@@ -9,11 +9,11 @@ services:
             MONGO_INITDB_ROOT_PASSWORD: password123
             CAPTR_ADMIN_USERNAME: captr-admin
             CAPTR_ADMIN_PASSWORD: password123
-            MONGO_INITDB_DATABASE: captr_db
+            MONGO_INITDB_DATABASE: captr-db
         ports:
             - 27017:27017/tcp
         volumes:
-            - db-data:/data/db
+            - captr-data:/data/db
             - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
         healthcheck:
             test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]

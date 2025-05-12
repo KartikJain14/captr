@@ -3,3 +3,8 @@ yt-dlp==2025.4.30
 google-genai==1.14.0
 pymongo==4.12.1
 youtube-transcript-api==0.5.0
+python-dotenv==1.1.0
+pydantic==2.11.4
+bcrypt==4.3.0
+pyjwt=2.10.1
+resend==2.9.0

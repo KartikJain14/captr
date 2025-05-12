@@ -3,7 +3,7 @@ db.createUser({
 	pwd: process.env.CAPTR_ADMIN_PASSWORD,
 	roles: [
 		{
-			role: "readWrite",
+			role: "root",
 			db: process.env.MONGO_INITDB_DATABASE,
 		},
 	],
