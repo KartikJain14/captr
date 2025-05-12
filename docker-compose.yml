@@ -1,0 +1,35 @@
+name: captr
+
+services:
+    mongo:
+        image: mongo:jammy
+        restart: unless-stopped
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: mongo-admin
+            MONGO_INITDB_ROOT_PASSWORD: password123
+            CAPTR_ADMIN_USERNAME: captr-admin
+            CAPTR_ADMIN_PASSWORD: password123
+            MONGO_INITDB_DATABASE: captr_db
+        ports:
+            - 27017:27017/tcp
+        volumes:
+            - db-data:/data/db
+            - ./scripts/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+        healthcheck:
+            test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+            interval: 5s
+            timeout: 5s
+            retries: 10
+
+    redis:
+        image: bitnami/redis:latest
+        restart: unless-stopped
+        ports:
+            - 6379:6379/tcp
+        environment:
+            - ALLOW_EMPTY_PASSWORD=yes
+        labels:
+            - "com.centurylinklabs.watchtower.enable=false"
+
+volumes:
+    captr-data:
