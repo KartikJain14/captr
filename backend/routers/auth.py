@@ -26,7 +26,6 @@ jwt_secret = os.getenv("JWT_SECRET")
 load_dotenv()
 auth_router = APIRouter(prefix="/auth")
 mongo_uri = os.getenv("MONGO_URI")
-print(mongo_uri)
 client = pymongo.MongoClient(mongo_uri)
 
 try:
