@@ -1,9 +1,9 @@
 import os
 import asyncio
 import json
-import subprocess
 from dotenv import load_dotenv
 import google.generativeai as genai
+import yt_dlp
 
 async def get_youtube_search_queries(user_prompt, model_name='gemini-1.5-flash'):
     """Generate YouTube search queries using Gemini."""
@@ -28,7 +28,6 @@ async def get_youtube_search_queries(user_prompt, model_name='gemini-1.5-flash')
         lambda: model.generate_content(gemini_prompt)
     )
 
-    # Clean up results
     search_queries = [
         line.strip()
         for line in response.text.strip().split("\n")
@@ -37,49 +36,52 @@ async def get_youtube_search_queries(user_prompt, model_name='gemini-1.5-flash')
 
     return search_queries[:3]
 
-async def search_youtube_video(query, max_results=10):
+async def search_youtube_video(query, max_results=3):
     """Asynchronously search YouTube videos for a single query."""
     try:
-        # Use subprocess.Popen with asyncio to run non-blocking
-        proc = await asyncio.create_subprocess_exec(
-            "yt-dlp", 
-            f"ytsearch{max_results}:{query}", 
-            "--dump-json",
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
+        ydl_opts = {
+            'quiet': True,
+            'no_warnings': True,
+            'extract_flat': True,
+            'force_generic_extractor': True,
+            'ignoreerrors': True,
+            'playlistend': max_results
+        }
+        
+        search_query = f"ytsearch{max_results}:{query}"
+        
+        # Run yt-dlp in an executor to prevent blocking the event loop
+        loop = asyncio.get_running_loop()
+        results = await loop.run_in_executor(
+            None,
+            lambda: extract_info_with_ytdlp(search_query, ydl_opts)
         )
-
-        # Wait for the subprocess to complete
-        stdout, stderr = await proc.communicate()
-
-        if proc.returncode != 0:
-            print(f"Error searching for '{query}': {stderr.decode()}")
-            return []
-
+        
         videos = []
-        for line in stdout.decode().strip().split("\n"):
-            if line.strip():
-                try:
-                    vid = json.loads(line)
-                    video_info = {
-                        "title": vid.get("title", "N/A"),
-                        "url": f"https://www.youtube.com/watch?v={vid.get('id')}",
-                        "view_count": vid.get("view_count", "N/A"),
-                        "upload_date": vid.get("upload_date", "N/A")
-                    }
-                    videos.append(video_info)
-                except json.JSONDecodeError:
-                    print(f"Could not parse JSON for a video in query: {query}")
-
+        for vid in results.get('entries', []):
+            if vid:
+                video_info = {
+                    "title": vid.get("title", "N/A"),
+                    "url": f"https://www.youtube.com/watch?v={vid.get('id')}",
+                    "view_count": vid.get("view_count", "N/A"),
+                    "upload_date": vid.get("upload_date", "N/A")
+                }
+                videos.append(video_info)
+        
         return videos
 
     except Exception as e:
         print(f"Exception in searching '{query}': {e}")
         return []
 
+def extract_info_with_ytdlp(url, options):
+    """Extract info using yt-dlp (synchronous function to be run in executor)"""
+    with yt_dlp.YoutubeDL(options) as ydl:
+        return ydl.extract_info(url, download=False)
+
 async def search_youtube_videos(search_queries, max_results=3):
     """Asynchronously search YouTube videos for multiple queries."""
-    # Run searches concurrently
+    
     search_tasks = [search_youtube_video(query, max_results) for query in search_queries]
     results = await asyncio.gather(*search_tasks)
 
@@ -129,4 +131,4 @@ async def main():
         print(f"Error in main process: {e}")
 
 if __name__ == "__main__":
-    asyncio.run(main())   
+    asyncio.run(main())
