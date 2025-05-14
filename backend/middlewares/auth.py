@@ -24,15 +24,16 @@ async def get_current_user(
     )
     try:
         payload = jwt.decode(token.credentials, jwt_secret, algorithms=["HS256"])
-        user_id: str = payload.get("id")
-        if user_id is None:
-            raise credentials_exception
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token has expired",
         )
     except jwt.InvalidTokenError:
+        raise credentials_exception
+        
+    user_id: str = payload.get("id")
+    if user_id is None:
         raise credentials_exception
 
     user_data = user_collection.find_one({"_id": ObjectId(user_id)})
