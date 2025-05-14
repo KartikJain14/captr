@@ -36,3 +36,13 @@ class VerificationResponse(BaseModel):
     success: bool
     message: str = "User verified successfully"
     data: None = None
+
+
+class UserDetails(BaseModel):
+    user: UserModel
+
+
+class UserDetailsResponse(BaseModel):
+    success: bool
+    message: str = "User data fetched successfully"
+    data: UserDetails

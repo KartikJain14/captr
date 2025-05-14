@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
 from ..models import (
     LoginResponse,
@@ -8,31 +8,24 @@ from ..models import (
     VerificationResponse,
     LoginData,
     UserModel,
+    UserDetailsResponse,
+    UserDetails,
 )
 from ..utils.hashing import hash_password, check_password
 import os
-import pymongo
 from dotenv import load_dotenv
-import logging
-from pymongo.errors import CollectionInvalid
 import jwt
 from ..utils.email import send_email
 from datetime import timezone, datetime, timedelta
 from bson import objectid
+from ..utils.db import user_collection
+from ..middlewares.auth import get_current_user
 
 url = "http://localhost:8000"
 jwt_secret = os.getenv("JWT_SECRET")
 
 load_dotenv()
 auth_router = APIRouter(prefix="/auth")
-mongo_uri = os.getenv("MONGO_URI")
-client = pymongo.MongoClient(mongo_uri)
-
-try:
-    user_collection = client.users.create_collection("users")
-except CollectionInvalid:
-    logging.info("Users Collection already exists, skipping creation")
-    user_collection = client.users.users
 
 
 @auth_router.post("/login", response_model=LoginResponse)
@@ -121,3 +114,12 @@ def verify(token: str) -> VerificationResponse:
         {"$set": {"is_verified": True}},
     )
     return VerificationResponse(success=True)
+
+
+@auth_router.get("/me", response_model=UserDetailsResponse)
+async def get_me(current_user: UserModel = Depends(get_current_user)):
+    return UserDetailsResponse(
+        success=True,
+        message="User details fetched successfully",
+        data=UserDetails(user=current_user),
+    )
