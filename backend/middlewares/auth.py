@@ -12,11 +12,11 @@ load_dotenv()
 
 jwt_secret = os.getenv("JWT_SECRET")
 
-oauth2_scheme = HTTPBearer()
+bearer_token = HTTPBearer()
 
 
 async def get_current_user(
-    token: HTTPAuthorizationCredentials = Depends(oauth2_scheme),
+    token: HTTPAuthorizationCredentials = Depends(bearer_token),
 ) -> UserModel:
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -31,7 +31,7 @@ async def get_current_user(
         )
     except jwt.InvalidTokenError:
         raise credentials_exception
-        
+
     user_id: str = payload.get("id")
     if user_id is None:
         raise credentials_exception
