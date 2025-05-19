@@ -4,7 +4,7 @@ from pydantic import BaseModel, HttpUrl
 import sys
 import os
 import asyncio
-from ..transcribe import process_video, analyze_visual_segments
+from ..utils.transcribe import process_video, analyze_visual_segments
 
 transcribe_router = APIRouter(prefix="/api/transcript", tags=["transcript"])
 
