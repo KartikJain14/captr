@@ -1,4 +1,5 @@
 fastapi==0.115.12
+uvicorn==0.32.1
 yt-dlp==2025.4.30
 google-genai==1.14.0
 pymongo==4.12.1

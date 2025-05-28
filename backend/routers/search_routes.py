@@ -3,7 +3,7 @@ from typing import Dict, List, Optional
 import sys
 import os
 import asyncio
-from ..search import get_youtube_search_queries, search_youtube_videos
+from ..utils.search import get_youtube_search_queries, search_youtube_videos
 
 search_router = APIRouter(prefix="/api/search", tags=["search"])
 
