@@ -4,7 +4,7 @@ from pydantic import BaseModel, HttpUrl
 import sys
 import os
 import asyncio
-from ..utils.extract_images import extract_video_id, parse_transcript, get_stream_url, extract_frames_python
+from utils.extract_images import extract_video_id, parse_transcript, get_stream_url, extract_frames_python
 
 extract_router = APIRouter(prefix="/api/frames", tags=["frames"])
 

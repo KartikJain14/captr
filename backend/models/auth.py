@@ -1,7 +1,7 @@
 from pydantic import BaseModel, BeforeValidator
 from typing import Annotated
-from .user import UserModel
-from ..utils.validators import validate_password, validate_email
+from models.user import UserModel
+from utils.validators import validate_password, validate_email
 
 
 class LoginRequest(BaseModel):
