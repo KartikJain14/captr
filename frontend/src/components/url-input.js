@@ -23,7 +23,7 @@ export function UrlInput() {
                     value={url}
                     onChange={(e) => setUrl(e.target.value)}
                     placeholder="Or Enter URL!"
-                    className="bg-gray-200 text-black pl-10 py-6 rounded-md"
+                    className="bg-gray-200 text-white pl-10 py-6 rounded-md"
                 />
                 <Link className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
             </div>
