@@ -248,10 +248,14 @@ export default function ButtonComponent() {
               <div className="flex h-full flex-col">
                 <div className="flex-1 overflow-auto bg-zinc-900 p-4 font-mono text-sm text-zinc-100">
                   <pre>
-                    {messages.length > 0 && messages[messages.length - 1].codeBlocks
-                      ? messages[messages.length - 1].codeBlocks[0].code
-                      : `// No code generated yet
-// Ask v0 to create a component`}
+                    {(() => {
+                      const lastMessage = messages[messages.length - 1];
+                      const codeBlocks = lastMessage?.codeBlocks;
+                      const firstCodeBlock = codeBlocks?.[0];
+                      
+                      return firstCodeBlock?.code || `// No code generated yet
+// Ask v0 to create a component`;
+                    })()}
                   </pre>
                 </div>
               </div>

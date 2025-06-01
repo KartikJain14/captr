@@ -57,12 +57,12 @@ export default function Home() {
       setCurrentVideoIndex((prev) => (prev + 1) % videoExamples.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [videoExamples.length]);
 
   const currentVideo = videoExamples[currentVideoIndex];
   return (
     <main className="min-h-screen relative flex flex-col">
-      <div className="fixed inset-0 z-0 opacity-70">
+      <div className="fixed inset-0 z-0 opacity-50">
         <Image
           src="/background.png"
           alt="Purple gradient background"

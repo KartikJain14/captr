@@ -1,6 +1,6 @@
 import type React from "react";
 import "@/app/globals.css";
-import { Inter, Instrument_Sans } from "next/font/google";
+import {  Instrument_Sans } from "next/font/google";
 const inter = Instrument_Sans({ subsets: ["latin"] });
 
 export const metadata = {
