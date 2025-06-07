@@ -1,8 +1,9 @@
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.responses import JSONResponse
-from .routers import auth_router, search_router, transcribe_router, extract_router
-from .models import BaseResponseModel
+
+from routers import auth_router, process_router, search_router, transcribe_router, extract_router
+from models import BaseResponseModel
 
 app = FastAPI()
 
@@ -53,3 +54,4 @@ app.include_router(auth_router)
 app.include_router(search_router)
 app.include_router(transcribe_router)
 app.include_router(extract_router)
+app.include_router(process_router)

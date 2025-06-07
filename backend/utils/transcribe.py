@@ -129,7 +129,7 @@ async def analyze_visual_segments(transcript_text: str) -> list[dict]:
         "You are analyzing a YouTube video transcript from a technical or educational video. "
         "Identify two types of important teaching moments:\n"
         "1. Moments where a visual would significantly help (like a diagram, code snippet, recursion tree, etc).\n"
-        "2. Moments where the explanation is deep or nuanced and should be elaborated into detailed notes or examples later by an AI.\n\n"
+        "2. Moments where the explanation is deep or nuanced and should be elaborated into detailed notes or examples later by an AI, try and get as descriptive with the images.\n\n"
         "For each, return a line in the format:\n"
         "<MM:SS> - <type: visual/text> - <short description of what's being explained or what visual would help>\n\n"
         "Don't add any commentary, headers, or extra formatting. Just the lines.\n\n"

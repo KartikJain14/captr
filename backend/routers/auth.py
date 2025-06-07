@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from fastapi.exceptions import HTTPException
-from ..models import (
+from models import (
     LoginResponse,
     LoginRequest,
     RegisterResponse,
@@ -11,15 +11,15 @@ from ..models import (
     UserDetailsResponse,
     UserDetails,
 )
-from ..utils.hashing import hash_password, check_password
+from utils.hashing import hash_password, check_password
 import os
 from dotenv import load_dotenv
 import jwt
-from ..utils.email import send_email
+from utils.email import send_email
 from datetime import timezone, datetime, timedelta
 from bson import objectid
-from ..utils.db import user_collection
-from ..middlewares.auth import get_current_user
+from utils.db import user_collection
+from middlewares.auth import get_current_user
 
 url = "http://localhost:8000"
 jwt_secret = os.getenv("JWT_SECRET")

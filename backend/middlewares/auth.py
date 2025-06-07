@@ -5,8 +5,8 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from bson import ObjectId
 from dotenv import load_dotenv
 
-from ..models.user import UserModel
-from ..utils.db import user_collection
+from models.user import UserModel
+from utils.db import user_collection
 
 load_dotenv()
 
